@@ -10,12 +10,14 @@ namespace BananaCity.Controllers
         {
             return View();
         }
-
+        // Tela de Clientes e Pets (Movida para cá para facilitar)
         public IActionResult Clientes()
         {
             var clientes = Simulacao.ClientesList;
             return View(clientes);
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
