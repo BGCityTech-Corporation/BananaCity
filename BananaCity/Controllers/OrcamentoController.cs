@@ -1,52 +1,30 @@
-﻿using BananaCity.Models;
-using Microsoft.AspNetCore.Mvc;
-
-namespace BananaCity.Controllers
+﻿namespace LojaPet.Models
 {
-    public class OrcamentoController : Controller
+    public class Orcamento
     {
-        [HttpGet]
-        public IActionResult Index()
+        public Pet PetDoCliente { get; set; }
+        public bool IncluiBanho { get; set; }
+        public bool IncluiTosa { get; set; }
+        public bool IncluiHidratacao { get; set; }
+
+        
+        public Orcamento(Pet pet)
         {
-            return View();
+            PetDoCliente = pet;
         }
 
-        [HttpPost]
-        public IActionResult Calcular(string nomeCliente, string telefone, string nomePet, string raca, string porte, bool incluiBanho, bool incluiTosa, bool incluiHidratacao, string horario)
+        
+        public virtual decimal CalcularValor()
         {
-            // 1. Instancia o Pet (Aplicando a sua classe e encapsulamento)
-            Pet pet = new Pet { NomePet = nomePet, Raca = raca, Porte = porte };
+            decimal valorTotal = 0;
+            if (IncluiBanho) valorTotal += 40.00m;
+            if (IncluiTosa) valorTotal += 35.00m;
+            if (IncluiHidratacao) valorTotal += 20.00m;
 
-            // 2. Instancia o Orçamento (Usando o construtor e polimorfismo para cálculo)
-            Orcamento orcamento = new Orcamento(pet)
-            {
-                IncluiBanho = incluiBanho,
-                IncluiTosa = incluiTosa,
-                IncluiHidratacao = incluiHidratacao
-            };
+            if (PetDoCliente.Porte == "Grande") valorTotal += 30.00m;
+            else if (PetDoCliente.Porte == "Medio") valorTotal += 15.00m;
 
-            decimal valorTotal = orcamento.CalcularValor();
-
-            // 3. INTEGRAÇÃO: Salva automaticamente na lista de Clientes/Pets
-            int novoIdCliente = Simulacao.ClientesList.Count + 1;
-            Cliente novoCliente = new Cliente(novoIdCliente, nomeCliente, telefone);
-            novoCliente.Pets.Add(pet);
-            Simulacao.ClientesList.Add(novoCliente);
-
-            // 4. INTEGRAÇÃO: Salva automaticamente na Agenda do Dia
-            string servicoDescricao = (incluiBanho ? "Banho " : "") + (incluiTosa ? "Tosa " : "") + (incluiHidratacao ? "Hidratação" : "").Trim();
-            if (string.IsNullOrWhiteSpace(servicoDescricao)) servicoDescricao = "Serviço Geral";
-
-            int novoIdAgenda = Simulacao.AgendaList.Count + 1;
-            Agendamento novoAgendamento = new Agendamento(novoIdAgenda, nomeCliente, nomePet, servicoDescricao, string.IsNullOrEmpty(horario) ? "08:00" : horario);
-            Simulacao.AgendaList.Add(novoAgendamento);
-
-            // Passa os dados para a tela de Resultado
-            ViewBag.NomeCliente = nomeCliente;
-            ViewBag.NomePet = pet.NomePet;
-            ViewBag.ValorTotal = valorTotal;
-
-            return View("Index");
+            return valorTotal;
         }
     }
 }

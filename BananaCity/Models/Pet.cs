@@ -1,4 +1,4 @@
-﻿namespace BananaCity.Models
+﻿namespace LojaPet.Models
 {
     public class Pet
     {
