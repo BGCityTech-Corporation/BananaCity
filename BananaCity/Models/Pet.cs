@@ -1,8 +1,11 @@
-﻿using System;
-
-public class Class1
+﻿namespace LojaPet.Models
 {
-	public Class1()
-	{
-	}
+    public class Pet
+    {
+
+        public string NomePet { get; set; }
+        public string Raca { get; set; }
+        public string Porte { get; set; } // Pequeno, Médio, Grande
+    }
+
 }
