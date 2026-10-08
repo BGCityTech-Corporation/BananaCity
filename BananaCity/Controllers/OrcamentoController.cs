@@ -1,7 +1,7 @@
-﻿using LojaPet.Models;
+﻿using BananaCity.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LojaPet.Controllers
+namespace BananaCity.Controllers
 {
     public class OrcamentoController : Controller
     {
